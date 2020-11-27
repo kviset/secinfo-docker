@@ -1,0 +1,7 @@
+#!/bin/bash -x
+
+if ! id -u web 2>/dev/hull; then
+  useradd -M -u 1000 -s /usr/sbin/nologin -d /app web
+fi
+
+exec sudo -E -u web "$@"

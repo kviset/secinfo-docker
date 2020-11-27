@@ -1,0 +1,20 @@
+---
+- name: Provision hacker
+  hosts: hacker
+  become: true
+  tasks:
+
+    - name: Set a hostname
+      hostname:
+        name: hacker
+
+    - name: Install required packages
+      apt:
+        name:
+          - nmap
+          - curl
+          - build-essential
+          - netcat
+          - git
+          - mariadb-client
+        state: present

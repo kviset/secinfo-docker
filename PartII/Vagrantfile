@@ -1,0 +1,23 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  config.vm.define "victim" do |victim|
+    victim.vm.box = "debian/buster64"
+    victim.vm.network "private_network", ip: "192.168.50.6", virtualbox__intnet: "stand"
+    victim.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { ansible_python_interpreter:"/usr/bin/python3" }
+      ansible.playbook = "provision/victim.yml"
+    end
+  end
+
+  config.vm.define "hacker" do |hacker|
+    hacker.vm.box = "debian/buster64"
+    hacker.vm.network "private_network", ip: "192.168.50.7", virtualbox__intnet: "stand"
+    hacker.vm.provision "ansible" do |ansible|
+      ansible.extra_vars = { ansible_python_interpreter:"/usr/bin/python3" }
+      ansible.playbook = "provision/hacker.yml"
+    end
+  end
+end

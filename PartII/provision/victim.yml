@@ -1,0 +1,54 @@
+---
+- name: Provision victim
+  hosts: victim
+  become: true
+  tasks:
+
+    - name: Set a hostname
+      hostname:
+        name: victim
+
+    - name: Install required packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg-agent
+          - software-properties-common
+          - python3-pip
+        state: present
+
+    - name: Add docker's official GPG key
+      apt_key:
+        url: https://download.docker.com/linux/debian/gpg 
+        state: present
+
+    - name: Add docker's repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/debian stretch stable
+        state: present
+        update_cache: true
+
+    - name: Install docker
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
+
+    - name: Install docker-compose
+      pip:
+        name: docker-compose
+        state: present
+
+    - name: Add user vagrant to docker group
+      user:
+        name: vagrant
+        groups: docker
+
+    - name: Create Flag-file
+      copy:
+        dest: /home/vagrant/FLAG
+        content: WAS HACKED
