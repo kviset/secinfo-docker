@@ -3,16 +3,11 @@
   hosts: hacker
   become: true
   tasks:
-
-    - name: Set a hostname
-      hostname:
-        name: hacker
-
-    - name: Install required packages
-      apt:
-        name:
-          - nmap
-          - curl
-          - build-essential
-          - netcat
-        state: present
+  - name: Install required packages
+    apt:
+      name:
+      - nmap
+      - curl
+      - build-essential
+      - netcat
+      state: present

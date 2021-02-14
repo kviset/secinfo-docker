@@ -3,9 +3,16 @@
 
 Vagrant.configure("2") do |config|
 
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "2048"
+    vb.cpus = 1
+    vb.linked_clone = true
+  end
+
   config.vm.define "victim" do |victim|
     victim.vm.box = "debian/buster64"
-    victim.vm.network "private_network", ip: "192.168.50.4", virtualbox__intnet: "stand"
+    victim.vm.hostname = "victim"
+    victim.vm.network "private_network", ip: "192.168.50.4"
     victim.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { ansible_python_interpreter:"/usr/bin/python3" }
       ansible.playbook = "provision/victim.yml"
@@ -14,7 +21,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "hacker" do |hacker|
     hacker.vm.box = "debian/buster64"
-    hacker.vm.network "private_network", ip: "192.168.50.5", virtualbox__intnet: "stand"
+    hacker.vm.hostname = "hacker"
+    hacker.vm.network "private_network", ip: "192.168.50.5"
     hacker.vm.provision "ansible" do |ansible|
       ansible.extra_vars = { ansible_python_interpreter:"/usr/bin/python3" }
       ansible.playbook = "provision/hacker.yml"
